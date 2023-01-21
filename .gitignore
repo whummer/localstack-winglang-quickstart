@@ -1,0 +1,5 @@
+wing/
+target/
+node_modules/
+
+terraform.*tfstate*
