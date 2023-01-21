@@ -1,3 +1,5 @@
+[![Build status](https://github.com/whummer/localstack-winglang-quickstart/actions/workflows/test.yml/badge.svg)](https://github.com/whummer/localstack-winglang-quickstart/actions)
+
 # LocalStack Winglang Quickstart
 
 Sample repo for running [Winglang](https://www.winglang.io/) applications on [LocalStack](https://localstack.cloud).
@@ -10,7 +12,7 @@ We will take the "Hello World" example provided by Winglang, deploy it against L
 * Node.js v18+, npm
 * Python, pip
 * Terraform
-* `aws` CLI
+* [`awslocal`](https://github.com/localstack/awscli-local) CLI
 * `make`
 
 ## Installing

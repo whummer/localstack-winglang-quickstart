@@ -8,17 +8,33 @@ on:
 
 name: Build and Test
 jobs:
-  test:
+  build_test:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
       uses: actions/checkout@v3
+    - name: Setup Node v18
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
 
     - name: Start LocalStack
       run: |
-        pip install localstack
+        docker pull mlupin/docker-lambda:nodejs16.x &
+        pip install awscli-local localstack
         docker pull localstack/localstack
-        localstack start -d
+        DEBUG=1 localstack start -d
 
     - name: Deploy app and run test
-      run: make test
+      run: |
+        make test
+        docker logs localstack_main
+
+    - name: Assert test result
+      run: |
+        awslocal s3 ls
+        bucket=$(awslocal s3 ls | awk '{print $3}' | sort | tail -n 1)
+        echo "Using result bucket $bucket"
+        awslocal s3api wait object-exists --bucket "$bucket" --key hello.txt
+        awslocal s3 cp s3://$bucket/hello.txt /tmp/hello.txt
+        cat /tmp/hello.txt | grep LocalStack
