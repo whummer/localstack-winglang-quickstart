@@ -4,7 +4,7 @@
 
 Sample repo for running [Winglang](https://www.winglang.io/) applications on [LocalStack](https://localstack.cloud).
 
-We will take the "Hello World" example provided by Winglang, deploy it against LocalStack, and run an end-to-end invocation - all running entirely on the local machine!
+We will take the [Voting App](https://github.com/winglang/voting-app) example provided by Winglang, deploy it against LocalStack, and run an end-to-end invocation - all running entirely on the local machine!
 
 ## Prerequisites
 
@@ -34,9 +34,42 @@ First, make sure that you have LocalStack running in your local Docker, e.g., us
 $ localstack start
 ```
 
-To compile the app and deploy it to LocalStack:
+To compile the sample app and deploy it to LocalStack:
 ```
 $ make deploy
+```
+
+Once the app is deployed, we can then determine the ID of the API Gateway:
+```
+$ awslocal apigateway get-rest-apis | jq -r '.items[0].id'
+5t2vuzar6c
+```
+
+Assert that the API Gateway endpoint can be properly invoked:
+```
+$ curl -X POST http://5t2vuzar6c.execute-api.localhost.localstack.cloud:4566/prod/requestChoices
+["Nori","Ravioli"]
+```
+
+Next, we create a file `voting-app/website/public/config.json` with the following content (make sure to copy the right API Gateway ID from the output above):
+```
+{
+    "apiUrl": "http://5t2vuzar6c.execute-api.localhost.localstack.cloud:4566/prod"
+}
+```
+
+Finally, we can build and start up the demo web app, which will become available in the browser under http://localhost:3000
+```
+$ cd voting-app/website
+$ npm install
+$ npm run start
+```
+
+## Old: Running the "Hello World" Wing app
+
+To compile the app and deploy it to LocalStack:
+```
+$ make deploy-hello-world
 ```
 
 Once the app is deployed, we can then determine the URL of the deployed SQS queue, and send a message to it (or simply run `make test`):

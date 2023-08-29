@@ -1,9 +1,12 @@
 {
   "name": "localstack-winglang",
   "devDependencies": {
-    "winglang": "^0.4.114"
+    "winglang": "^0.26.1",
+    "@aws-sdk/client-dynamodb": "^3.369.0",
+    "@cdktf/provider-aws": "^16.0.2"
   },
   "scripts": {
-    "compile": "wing compile --target tf-aws wing/examples/tests/valid/hello.w"
+    "wing": "wing",
+    "compile": "wing compile --target tf-aws"
   }
 }

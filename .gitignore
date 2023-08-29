@@ -3,3 +3,8 @@ target/
 node_modules/
 
 terraform.*tfstate*
+.terraform/
+.terraform.lock.hcl
+
+voting-app/
+
